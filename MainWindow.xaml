@@ -1,0 +1,126 @@
+﻿<Window x:Class="FileContentSearcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="600" Width="800">
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" Height="40">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{Binding Path=SearchingString}" />
+                <Label Content="{Binding Path=CurrentSearchingFile}" />
+            </StackPanel>
+        </StatusBar>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+                <ContextMenu x:Key="cmFile">
+                    <MenuItem Header="Open folder" Name="miOpenFolder" Click="miOpenFolder_Click" />
+                    <MenuItem Header="Copy file" Name="miCopyFile" Click="miCopyFile_Click" />
+                    <MenuItem Header="Copy file path" Name="miCopyFilePath" Click="miCopyFilePath_Click" />
+                    <MenuItem Header="Copy directory path" Name="miCopyDirectoryPath" Click="miCopyDirectoryPath_Click" />
+                    <MenuItem Header="Copy file content" Name="miCopyFileContent" Click="miCopyFileContent_Click" />
+                </ContextMenu>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="5" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" />
+            <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" />
+        
+            <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" >
+                <Label DockPanel.Dock="Left" Content="Search directory" />
+                <Button Name="btnChangeDirectory" Content="Change directory" DockPanel.Dock="Right" Height="50" VerticalAlignment="Bottom" Click="btnChangeDirectory_Click" />
+                <TextBox Name="tbDirectory" TextWrapping="WrapWithOverflow" Text="" />
+            </DockPanel>
+            <Grid Grid.Column="0" Grid.Row="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80" />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.Resources>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="HorizontalAlignment" Value="Left" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Search type" Grid.Column="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Content="Name" Grid.Column="0" Grid.Row="0" />
+                            <CheckBox Name="cbPatternFileName" Grid.Column="1" Grid.Row="0" IsChecked="True" />
+                            <Label Content="Content" Grid.Column="0" Grid.Row="1" />
+                            <CheckBox Name="cbPatternFileContent" Grid.Column="1" Grid.Row="1" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Search Option" Grid.Column="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Content="Case" Grid.Column="0" Grid.Row="0" />
+                            <CheckBox Name="cbCase" Grid.Column="1" Grid.Row="0" />
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+                <GroupBox Header="Search file pattern" Grid.Row="1">
+                    <TextBox Name="tbSearchFilePattern" TextWrapping="Wrap" AcceptsReturn="True" Text="" />
+                </GroupBox>
+                <GroupBox Header="Search content" Grid.Row="2">
+                    <DockPanel>
+                        <Button Name="btnSearch" Content="Search" DockPanel.Dock="Bottom" Height="100" Click="btnSearch_Click" />
+                        <TextBox Name="tbSearchStrings" TextWrapping="Wrap" AcceptsReturn="True" Text="" />
+                    </DockPanel>
+                </GroupBox>
+            </Grid>
+            <DockPanel Grid.Column="2" Grid.Row="2" >
+                <ListView ItemsSource="{Binding Path=SearchedFiles}" 
+                          SelectedItem="{Binding Path=SelectedFile}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                          DockPanel.Dock="Left" MaxWidth="300">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="5" ContextMenu="{StaticResource cmFile}">
+                                <Label Content="{Binding Path=Name}" 
+                                           DockPanel.Dock="Bottom" Height="50" 
+                                           VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <RichTextBox Name="rtbFileContent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>
